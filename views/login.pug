@@ -1,0 +1,10 @@
+extends layouts/main
+
+block content
+    .form-container
+        //- method는 post. get으로 할 경우 정보가 url에 나타남. 로그인 정보는 비밀로 유지해야 함
+        form(action=routes.login, method="post")
+            input(type="email", name="email", placeholder="Email")
+            input(type="password", name="password", placeholder="Password")
+            input(type="submit", value="Log In")
+        include partials/socialLogin

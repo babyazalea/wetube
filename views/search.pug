@@ -1,0 +1,14 @@
+extends layouts/main
+include mixins/videoBlock
+
+block content
+    .search__header
+        h3 Searching for : #{searchingBy}
+    .search__videos
+        each item in videos
+            //- 더하기 표시로 mixin을 사용할 수 있다
+            +videoBlock({
+                title:item.title,
+                views:item.views,
+                videoFile:item.videoFile
+            })

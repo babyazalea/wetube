@@ -1,17 +1,21 @@
-//Global
+//각 routes의 주소를 정의하여 한 곳에 묶어둠. 이로써 이 app의 routes 경로를 외우지 않고 app의 전역에서 사용이 가능. 또한 경로에 대한 수정사항이 있을 경우 전역으로 한 번에 적용 가능.
+
+// Global
 const HOME = "/";
 const JOIN = "/join";
 const LOGIN = "/login";
 const LOGOUT = "/logout";
 const SEARCH = "/search";
 
-//Users
+// Users
+
 const USERS = "/users";
 const USER_DETAIL = "/:id";
 const EDIT_PROFILE = "/edit-profile";
 const CHANGE_PASSWORD = "/change-password";
 
-//Videos
+// Videos
+
 const VIDEOS = "/videos";
 const UPLOAD = "/upload";
 const VIDEO_DETAIL = "/:id";

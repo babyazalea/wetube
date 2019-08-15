@@ -1,0 +1,13 @@
+//- 레이아웃을 extends(확장, 복사, 가져오기)
+extends layouts/main
+//- 만들었던 mixin을 가져온다
+include mixins/videoBlock
+block content
+    .videos
+        each item in videos
+            //- 더하기 표시로 mixin을 사용할 수 있다
+            +videoBlock({
+                title:item.title,
+                views:item.views,
+                videoFile:item.videoFile
+            })
