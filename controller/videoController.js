@@ -1,4 +1,5 @@
 import { videos } from "../db";
+import routes from "../routes";
 
 //아래의 render 함수는 자동으로 views 폴더에서 파일명과 확장자(pug)가 일치하는 파일을 찾아 렌더링 함.
 
@@ -8,6 +9,7 @@ export const home = (req, res) => {
 };
 export const search = (req, res) => {
   // const searchingBy = req.query.term;
+  // query에 저장된 검색어를 request
   const {
     query: { term: searchingBy }
   } = req;
@@ -15,8 +17,15 @@ export const search = (req, res) => {
   res.render("search", { pageTitle: "Search", searchingBy, videos });
 };
 
-export const upload = (req, res) =>
+export const getUpload = (req, res) =>
   res.render("upload", { pageTitle: "Upload" });
+
+export const postUpload = (req, res) => {
+  const {
+    body: { file, title, description }
+  } = req;
+  res.redirect(routes.videoDetail(312312));
+};
 
 export const videoDetail = (req, res) =>
   res.render("videoDetail", { pageTitle: "Video Detail" });

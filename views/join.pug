@@ -4,9 +4,10 @@ block content
     .form-container
         //- method는 post. get으로 할 경우 정보가 url에 나타남. 로그인 정보는 비밀로 유지해야 함
         form(action=routes.join, method="post")
-            input(type="text", name="name", placeholder="Full Name")
-            input(type="email", name="email", placeholder="Email")
-            input(type="password", name="password", placeholder="Password")
-            input(type="password", name="password2", placeholder="Verify Password")
+            //- 다음 input 창에는 내용이 필수적이므로 required=true
+            input(type="text", name="name", placeholder="Full Name", required=true)
+            input(type="email", name="email", placeholder="Email", required=true)
+            input(type="password", name="password", placeholder="Password", required=true)
+            input(type="password", name="password2", placeholder="Verify Password", required=true)
             input(type="submit", value="Join Now")
         include partials/socialLogin

@@ -4,6 +4,11 @@ import routes from "./routes";
 export const localsMiddleware = (req, res, next) => {
   res.locals.siteName = "Wetube";
   res.locals.routes = routes;
+  res.locals.user = {
+    isAuthenticated: true,
+    id: 1
+  };
+
   //request(요청)과 response(응답) 사이(middle)에 있으므로
   next();
 };
