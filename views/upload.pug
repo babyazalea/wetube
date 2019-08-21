@@ -2,10 +2,11 @@ extends layouts/main
 
 block content
     .form-container
-        form(action=`/videos${routes.upload}`, method="post")
+        //- multer를 이용하기 위해 form의 인코딩을 변경
+        form(action=`/videos${routes.upload}`, method="post", enctype="multipart/form-data")
             label(for="file") Video File
             //- 다음 input 창에는 내용이 필수적이므로 required=true
-            input(type="file", id="file", name="file", required=true)
+            input(type="file", id="file", name="videoFile", required=true, accept="video/*")
             input(type="text", placeholder="Title", name="title", required=true)
             textarea(name="description", placeholder="Description", required=true)
             input(type="submit", value="Upload Video")

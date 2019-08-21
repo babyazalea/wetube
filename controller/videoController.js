@@ -28,14 +28,24 @@ export const search = (req, res) => {
   res.render("search", { pageTitle: "Search", searchingBy, videos });
 };
 
+// upload 파트도 마찬가지로 get, post 방식으로 분할
 export const getUpload = (req, res) =>
   res.render("upload", { pageTitle: "Upload" });
 
-export const postUpload = (req, res) => {
+// upload의 post 접속 방식에서 upload되는 파일의 title과 des를 받아옴
+// 파일의 경로도 필요하지만, 파일을 실제로 서버 컴퓨터에 저장하는 것이 아니라, 업로드 전용서버(aws 등)에 업로드 한 후에 해당 URL을 가져올 것임. 그러므로 파일을 업로드 전용 서버에 업로드 후 해당 URL을 가져오는 과정이 필요
+export const postUpload = async (req, res) => {
   const {
-    body: { file, title, description }
+    body: { title, description },
+    file: { path }
   } = req;
-  res.redirect(routes.videoDetail(312312));
+  const newVideo = await Video.create({
+    fileUrl: path,
+    title,
+    description
+  });
+  console.log(newVideo);
+  res.redirect(routes.videoDetail(newVideo.id));
 };
 
 export const videoDetail = (req, res) =>
