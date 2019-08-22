@@ -16,6 +16,10 @@ const app = express();
 app.use(helmet());
 //view engine으로 pug 사용. pug/express는 view 파일들의 위치에 관한 기본 설정으이 /views(폴더)로 되어 있음.
 app.set("view engine", "pug");
+
+// 주어진 directory에서 file을 전달하는 새로운 middleware function
+app.use("/uploads", express.static("uploads"));
+
 //쿠키를 전달받아서 사용할 수 있도록 만들어주는 middleWare. 사용자 인증 같은 곳에서 쿠키를 검사할 때 사용.
 app.use(cookieParser());
 

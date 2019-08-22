@@ -1,7 +1,7 @@
 import multer from "multer";
 import routes from "./routes";
 
-const multerVideo = multer({ dest: "videos/" });
+const multerVideo = multer({ dest: "uploads/videos/" });
 
 //local 변수를 global 변수로 사용하도록 만들어주는 middleWare
 export const localsMiddleware = (req, res, next) => {
