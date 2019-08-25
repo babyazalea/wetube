@@ -11,19 +11,29 @@ export const home = async (req, res) => {
   try {
     // Video 모델과 같은 비디오 데이터를 모두 표시함
     // await 키워드는 async를 쓰지 않으면 쓸 수 없음
-    const videos = await Video.find({});
+    // sort({arg:-1}) = 정렬 순서를 뒤바꿈
+    const videos = await Video.find({}).sort({ _id: -1 });
     res.render("home", { pageTitle: "Home", videos });
   } catch (error) {
     console.log(error);
     res.render("home", { pageTitle: "Home", videos: [] });
   }
 };
-export const search = (req, res) => {
+export const search = async (req, res) => {
   // const searchingBy = req.query.term;
   // query에 저장된 검색어를 request
   const {
     query: { term: searchingBy }
   } = req;
+  let videos = [];
+  try {
+    // 검색 조건을 정규 표현식(regular expression)을 이용해 정해준다. $regex는 해당 검색어를 포함하는 모든 검색 결과를 나타내주고, $option을 "i"로 정의하면 insensitive(예민하지 않음)로 변경되면서 대소문자 구별을 하지 않고 검색하게 된다
+    videos = await Video.find({
+      title: { $regex: searchingBy, $options: "i" }
+    });
+  } catch (error) {
+    console.log(error);
+  }
   //searchingBy : searchingBy ---> searchingBy
   res.render("search", { pageTitle: "Search", searchingBy, videos });
 };
