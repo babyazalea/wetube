@@ -18,10 +18,18 @@ const OUTPUT_DIR = path.join(__dirname, "static");
 
 // 본격적인 환경설정 부분
 const config = {
-  entry: ENTRY_FILE,
+  entry: ["@babel/polyfill", ENTRY_FILE],
   mode: MODE,
   module: {
     rules: [
+      {
+        test: /\/(js)$/,
+        use: [
+          {
+            loader: "babel-loader"
+          }
+        ]
+      },
       {
         // 정규표현식을 사용해서 scss 파일이 있는지 확인
         test: /\.(scss)$/,
@@ -35,7 +43,7 @@ const config = {
           {
             loader: "postcss-loader",
             options: {
-              plugin() {
+              plugins() {
                 return [autoprefixer({ browers: "cover 99.5%" })];
               }
             }

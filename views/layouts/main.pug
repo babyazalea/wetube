@@ -4,9 +4,11 @@ html
         script(src="https://kit.fontawesome.com/c5dcccb48d.js")
         //- siteName은 middlewares.js 에서, pageTitle은 controller의 페이지 각각의 명령에서 변수를 보내주고 있다
         title #{pageTitle} | #{siteName}
+        link(rel="stylesheet", href="/static/style.css")
     body
         include ../partials/header
         main
             //- block을 사용해 레이아웃에 변경될 부분을 지정할 수 있다
             block content
         include ../partials/footer
+        script(src="/static/main.js")

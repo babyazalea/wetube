@@ -19,6 +19,7 @@ app.set("view engine", "pug");
 
 // 주어진 directory에서 file을 전달하는 새로운 middleware function
 app.use("/uploads", express.static("uploads"));
+app.use("/static", express.static("static"));
 
 //쿠키를 전달받아서 사용할 수 있도록 만들어주는 middleWare. 사용자 인증 같은 곳에서 쿠키를 검사할 때 사용.
 app.use(cookieParser());
