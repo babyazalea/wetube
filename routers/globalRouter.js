@@ -13,7 +13,8 @@ const globalRouter = express.Router();
 
 globalRouter.get(routes.join, getJoin);
 // join route에 post 접근 방식을 추가한다
-globalRouter.post(routes.join, postJoin);
+// postJoin에서 입력한 값들을 next()에 해당하는 postLogin으로 전달한다
+globalRouter.post(routes.join, postJoin, postLogin);
 
 globalRouter.get(routes.login, getLogin);
 // login routes에 post 접근 방식을 추가한다

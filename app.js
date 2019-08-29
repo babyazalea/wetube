@@ -3,11 +3,14 @@ import morgan from "morgan";
 import helmet from "helmet";
 import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
+import passport from "passport";
 import { localsMiddleware } from "./middlewares";
+import routes from "./routes";
 import userRouter from "./routers/userRouter";
 import videoRouter from "./routers/videoRouter";
 import globalRouter from "./routers/globalRouter";
-import routes from "./routes";
+
+import "./passport";
 
 //express를 import해서 app 변수로 만듬
 const app = express();
@@ -29,6 +32,10 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 //morgan middleWare. 어플리케이션에서 발생하는 모든 일들을 logging.
 app.use(morgan("dev"));
+
+// user autenticate를 위한 passport js(cookieParser가 실행된 후 실행되어야 함)를 실행한다. passport는 initialize(초기화)된 후 쿠키 정보에 해당하는 사용자를 찾는다(sesssion)
+app.use(passport.initialize());
+app.use(passport.session());
 
 //local 변수를 global 변수로 사용하도록 만들어주는 middleWare
 app.use(localsMiddleware);

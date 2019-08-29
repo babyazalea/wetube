@@ -7,11 +7,8 @@ const multerVideo = multer({ dest: "uploads/videos/" });
 export const localsMiddleware = (req, res, next) => {
   res.locals.siteName = "Wetube";
   res.locals.routes = routes;
-  res.locals.user = {
-    isAuthenticated: false,
-    id: 1
-  };
-
+  // passport가 user가 담긴 object를 req에도 올려주므로 바로 사용이 가능하다
+  res.locals.user = req.user || {};
   //request(요청)과 response(응답) 사이(middle)에 있으므로
   next();
 };

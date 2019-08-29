@@ -1,4 +1,6 @@
+import passport from "passport";
 import routes from "../routes";
+import User from "../models/User";
 
 //아래의 render 함수는 자동으로 views 폴더에서 파일명과 확장자(pug)가 일치하는 파일을 찾아 렌더링 함.
 
@@ -10,7 +12,8 @@ export const getJoin = (req, res) => {
 };
 
 // globalRouter에 추가된 post 접근 방식에서 request(요청)으로 전달 받을 값, 즉 이름과 이메일, 비밀번호와 비밀번호를 확인 받는 과정을 response(응답)로 정의한다
-export const postJoin = (req, res) => {
+// next arg의 경우 req로 name, email, password 등을 전달 받아서 next로 넘겨준다
+export const postJoin = async (req, res, next) => {
   // app에 설치한 middleware인 bodyparser를 이용(app.js)하여 user가 입력한 4가지의 정보를 request(요청)할 수 있다
   const {
     body: { name, email, password, password2 }
@@ -20,18 +23,30 @@ export const postJoin = (req, res) => {
     res.status(400);
     res.render("join", { pageTitle: "Join" });
   } else {
-    // 패스워드를 정상적으로 입력했을 경우 home route로 redirect
-    res.redirect(routes.home);
+    try {
+      const user = await User({
+        name,
+        email
+      });
+      await User.register(user, password);
+      next();
+    } catch (error) {
+      console.log(error);
+      res.redirect(routes.home);
+    }
   }
 };
 
 export const getLogin = (req, res) =>
   res.render("login", { pageTitle: "Log In" });
 
-export const postLogin = (req, res) => {
-  res.redirect(routes.home);
-};
-
+// passport.autenticate method는 username, password가 필요하다
+// 그냥 login : user가 username과 password 입력한 값을 넘겨 받아 사용한다
+// join 후 login : postJoin에서 이 값을 넘겨 받는다
+export const postLogin = passport.authenticate("local", {
+  failureRedirect: routes.login,
+  successRedirect: routes.home
+});
 export const logout = (req, res) => {
   res.redirect(routes.home);
 };
