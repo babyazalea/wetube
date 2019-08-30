@@ -33,11 +33,8 @@ globalRouter.get(routes.gitHub, githubLogin);
 // githubLogin 함수가 정상적으로 실행되었다면 gitHubCallback route로 진입하며 github login이 진행되고, postGithubLogIn이 실행된다
 globalRouter.get(
   routes.gitHubCallback,
-  passport.authenticate(
-    "github",
-    { failureRedirect: "/login" },
-    postGithubLogIn
-  )
+  passport.authenticate("github", { failureRedirect: "/login" }),
+  postGithubLogIn
 );
 
 export default globalRouter;

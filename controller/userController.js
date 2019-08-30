@@ -58,7 +58,6 @@ export const githubLoginCallback = async (
   profile,
   cb
 ) => {
-  console.log(accessToken, refreshToken, profile, cb);
   const {
     _json: { id, avatar_url, name, email }
   } = profile;
