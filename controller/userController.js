@@ -47,7 +47,50 @@ export const postLogin = passport.authenticate("local", {
   failureRedirect: routes.login,
   successRedirect: routes.home
 });
+
+// github login function : passport.js에 명시한 GithubStrategy을 실행한다
+export const githubLogin = passport.authenticate("github");
+
+// 위의 github login fucntion이 끝난 후 passport.js에 명시한 githubLoginCallback가 실행된다
+export const githubLoginCallback = async (
+  accessToken,
+  refreshToken,
+  profile,
+  cb
+) => {
+  console.log(accessToken, refreshToken, profile, cb);
+  const {
+    _json: { id, avatar_url, name, email }
+  } = profile;
+  try {
+    // 해당 깃헙 이메일과 동일한 이메일로 가입된 아이디가 있는지 확인
+    const user = await User.findOne({ email });
+    if (user) {
+      // 동일한 이메일이 발견됐을 경우
+      user.gihubId = id;
+      user.save();
+      return cb(null, user);
+    }
+    // 동일한 아이디가 없을 경우 새로운 유저로 추가
+    const newUser = await User.create({
+      email,
+      name,
+      githubId: id,
+      avatarUrl: avatar_url
+    });
+    return cb(null, newUser);
+  } catch (error) {
+    return cb(error);
+  }
+};
+
+// 정상적으로 github 로그인이 되었다면 home으로 돌려보낸다
+export const postGithubLogIn = (req, res) => {
+  res.redirect(routes.home);
+};
+
 export const logout = (req, res) => {
+  req.logout();
   res.redirect(routes.home);
 };
 
