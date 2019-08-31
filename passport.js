@@ -2,8 +2,12 @@
 import passport from "passport";
 // npm install passport-github
 import GithubStrategy from "passport-github";
+import FacebookStrategy from "passport-facebook";
 import User from "./models/User";
-import { githubLoginCallback } from "./controller/userController";
+import {
+  githubLoginCallback,
+  facebookLoginCallback
+} from "./controller/userController";
 
 import routes from "./routes";
 
@@ -18,6 +22,19 @@ passport.use(
       callbackURL: `http://localhost:4000${routes.gitHubCallback}`
     },
     githubLoginCallback
+  )
+);
+
+passport.use(
+  new FacebookStrategy(
+    {
+      clientID: process.env.FB_ID,
+      clientSecret: process.env.FB_SECRET,
+      callbackURL: `https://evil-puma-5.localtunnel.me${routes.facebookCallback}`,
+      profileFields: ["id", "displayName", "photos", "email"],
+      scope: ["public_profile", "email"]
+    },
+    facebookLoginCallback
   )
 );
 
