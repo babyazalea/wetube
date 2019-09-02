@@ -52,9 +52,13 @@ export const postUpload = async (req, res) => {
   const newVideo = await Video.create({
     fileUrl: path,
     title,
-    description
+    description,
+    // 현재 업로드 하는 중인 user의 id
+    creator: req.user.id
   });
-  console.log(newVideo);
+  // user db에 videos 항목에 추가된 비디오의 id를 추가(push)한다
+  req.user.videos.push(newVideo.id);
+  req.user.save();
   res.redirect(routes.videoDetail(newVideo.id));
 };
 
@@ -65,7 +69,8 @@ export const videoDetail = async (req, res) => {
   } = req;
   try {
     // mongoose로 정의한 video 모델에서 findbyId(id로 찾기) 메소드를 사용
-    const video = await Video.findById(id);
+    // populate를 붙이면 괄호 안의 객체 전체를 불러올 수 있다(creator는 객체이다)
+    const video = await Video.findById(id).populate("creator");
     res.render("videoDetail", { pageTitle: video.title, video });
   } catch (error) {
     console.log(error);
@@ -79,7 +84,11 @@ export const getEditVideo = async (req, res) => {
   } = req;
   try {
     const video = await Video.findById(id);
-    res.render("editVideo", { pageTitle: `Edit ${video.title}`, video });
+    if (video.creator !== req.user.id) {
+      throw Error();
+    } else {
+      res.render("editVideo", { pageTitle: `Edit ${video.title}`, video });
+    }
   } catch (error) {
     console.log(error);
     res.redirect(routes.home);
@@ -105,7 +114,12 @@ export const deleteVideo = async (req, res) => {
     params: { id }
   } = req;
   try {
-    await Video.findOneAndRemove({ _id: id });
+    const video = await Video.findById(id);
+    if (video.creator !== req.user.id) {
+      throw Error();
+    } else {
+      await Video.findOneAndRemove({ _id: id });
+    }
   } catch (error) {
     console.log(error);
   }

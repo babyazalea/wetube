@@ -14,6 +14,7 @@ export const localsMiddleware = (req, res, next) => {
   next();
 };
 
+// 공개된 routes의 미들웨어
 export const onlyPublic = (req, res, next) => {
   if (req.user) {
     res.redirect(routes.home);
@@ -22,6 +23,7 @@ export const onlyPublic = (req, res, next) => {
   }
 };
 
+// 비공개 routes의 미들웨어
 export const onlyPrivate = (req, res, next) => {
   if (req.user) {
     next();
