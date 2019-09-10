@@ -2,6 +2,9 @@ extends layouts/main
 
 block content
     .form-container
+        .record-container#jsRecordContainer
+            video#jsVideoPreview
+            button#jsRecordBtn Start Recording
         //- multer를 이용하기 위해 form의 인코딩을 변경
         form(action=`/videos${routes.upload}`, method="post", enctype="multipart/form-data")
             .fileUpload
