@@ -1,5 +1,6 @@
 import routes from "../routes";
 import Video from "../models/Video";
+import Comment from "../models/Comment";
 
 //아래의 render 함수는 자동으로 views 폴더에서 파일명과 확장자(pug)가 일치하는 파일을 찾아 렌더링 함.
 
@@ -70,7 +71,9 @@ export const videoDetail = async (req, res) => {
   try {
     // mongoose로 정의한 video 모델에서 findbyId(id로 찾기) 메소드를 사용
     // populate를 붙이면 괄호 안의 객체 전체를 불러올 수 있다(creator는 객체이다)
-    const video = await Video.findById(id).populate("creator");
+    const video = await Video.findById(id)
+      .populate("creator")
+      .populate("comments");
     res.render("videoDetail", { pageTitle: video.title, video });
   } catch (error) {
     console.log(error);
@@ -140,6 +143,29 @@ export const postRegisterView = async (req, res) => {
   } catch (error) {
     res.status(400);
     res.end();
+  } finally {
+    res.end();
+  }
+};
+
+// Add comment
+
+export const postAddComment = async (req, res) => {
+  const {
+    params: { id },
+    body: { comment },
+    user
+  } = req;
+  try {
+    const video = await Video.findById(id);
+    const newComment = await Comment.create({
+      text: comment,
+      creator: user.id
+    });
+    video.comments.push(newComment._id);
+    video.save();
+  } catch (error) {
+    res.status(400);
   } finally {
     res.end();
   }
