@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const CommetnSchema = new mongoose.Schema({
+const CommentSchema = new mongoose.Schema({
   text: {
     type: String,
     required: "Text is required"
@@ -15,5 +15,5 @@ const CommetnSchema = new mongoose.Schema({
   }
 });
 
-const model = mongoose.model("Comment", CommetnSchema);
+const model = mongoose.model("Comment", CommentSchema);
 export default model;
