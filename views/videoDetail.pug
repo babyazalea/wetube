@@ -33,7 +33,8 @@ block content
             ul.video__comment-list#jsCommentList
                 each comment in video.comments.reverse()
                     li
-                        span=comment.text
+                        span#jsComment=comment.text
                         if loggedUser !== null && loggedUser.id == comment.creator
-                            span.comment__delete
-                                i.fas.fa-times
+                            span.comment__delete#jsRemoveBtn
+                                button(id=comment.id)
+                                    i.fas.fa-trash-alt

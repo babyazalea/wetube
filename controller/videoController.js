@@ -48,10 +48,10 @@ export const getUpload = (req, res) =>
 export const postUpload = async (req, res) => {
   const {
     body: { title, description },
-    file: { path }
+    file: { location }
   } = req;
   const newVideo = await Video.create({
-    fileUrl: path,
+    fileUrl: location,
     title,
     description,
     // 현재 업로드 하는 중인 user의 id
@@ -173,10 +173,16 @@ export const postAddComment = async (req, res) => {
 
 export const postRemoveComment = async (req, res) => {
   const {
-    params: { id }
+    params: { id },
+    user
   } = req;
   try {
-    await Comment.findByIdAndRemove(id);
+    const comment = await Comment.findById(id);
+    if (String(comment.creator) !== user.id) {
+      throw Error();
+    } else {
+      await Comment.findOneAndRemove({ _id: id });
+    }
   } catch (error) {
     console.log(error);
     res.status(400);

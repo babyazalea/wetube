@@ -160,7 +160,7 @@ export const postEditProfile = async (req, res) => {
       name,
       email,
       // 파일이 존재하는가? 존재한다면 해당 아바타 파일의 경로를(new one), 아니라면 이전 아바타 파일의 경로를 그대로 써라
-      avatarUrl: file ? file.path : req.user.avatarUrl
+      avatarUrl: file ? file.location : req.user.avatarUrl
     });
     res.redirect(routes.me);
   } catch (error) {
