@@ -5,7 +5,8 @@ dotenv.config();
 mongoose.connect(process.env.MONGO_URL, {
   // mongddb의 config
   useNewUrlParser: true,
-  useFindAndModify: false
+  useFindAndModify: false,
+  useMongoClient: true
 });
 
 const db = mongoose.connection;
