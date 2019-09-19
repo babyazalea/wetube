@@ -7,6 +7,7 @@ import passport from "passport";
 import mongoose from "mongoose";
 import session from "express-session";
 import path from "path";
+import flash from "express-flash";
 import MongoStore from "connect-mongo";
 import { localsMiddleware } from "./middlewares";
 import routes from "./routes";
@@ -49,6 +50,7 @@ app.use(
     store: new CokieStore({ mongooseConnection: mongoose.connection })
   })
 );
+app.use(flash());
 // user autenticate를 위한 passport js(cookieParser가 실행된 후 실행되어야 함)를 실행한다. passport는 initialize(초기화)된 후 쿠키 정보에 해당하는 사용자를 찾는다(session으로 식별된 사용자 정보를 passport에서 사용하도록 추출)
 app.use(passport.initialize());
 app.use(passport.session());

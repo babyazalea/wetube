@@ -19,6 +19,7 @@ export const postJoin = async (req, res, next) => {
     body: { name, email, password, password2 }
   } = req;
   if (password !== password2) {
+    req.flash("error", "Password dont match");
     // 입력한 패스워드와 확인할 패스워드가 일치하지 않을 경우 http 에러 코드 400을 서버로 전송한다
     res.status(400);
     res.render("join", { pageTitle: "Join" });
@@ -45,11 +46,16 @@ export const getLogin = (req, res) =>
 // join 후 login : postJoin에서 이 값을 넘겨 받는다
 export const postLogin = passport.authenticate("local", {
   failureRedirect: routes.login,
-  successRedirect: routes.home
+  successRedirect: routes.home,
+  successFlash: "Welcome",
+  failureFlash: "can't log in. check email and/or password"
 });
 
 // github login function : passport.js에 명시한 GithubStrategy을 실행한다
-export const githubLogin = passport.authenticate("github");
+export const githubLogin = passport.authenticate("github", {
+  successFlash: "Welcome",
+  failureFlash: "can't log in at this time"
+});
 
 // 위의 github login fucntion이 끝난 후 passport.js에 명시한 githubLoginCallback가 실행된다
 export const githubLoginCallback = async (
@@ -88,7 +94,10 @@ export const postGithubLogIn = (req, res) => {
   res.redirect(routes.home);
 };
 
-export const facebookLogin = passport.authenticate("facebook");
+export const facebookLogin = passport.authenticate("facebook", {
+  successFlash: "Welcome",
+  failureFlash: "can't log in at this time"
+});
 
 export const facebookLoginCallback = async (
   accessToken,
@@ -125,6 +134,7 @@ export const postFacebookLogin = (req, res) => {
 };
 
 export const logout = (req, res) => {
+  req.flash("info", "Logged out");
   req.logout();
   res.redirect(routes.home);
 };
@@ -143,6 +153,7 @@ export const userDetail = async (req, res) => {
     res.render("userDetail", { pageTitle: "User Detail", user });
   } catch (error) {
     console.log(error);
+    req.flash("error", "User not found");
     res.redirect(routes.home);
   }
 };
@@ -162,8 +173,11 @@ export const postEditProfile = async (req, res) => {
       // 파일이 존재하는가? 존재한다면 해당 아바타 파일의 경로를(new one), 아니라면 이전 아바타 파일의 경로를 그대로 써라
       avatarUrl: file ? file.location : req.user.avatarUrl
     });
+    req.flash("success", "profile updated");
     res.redirect(routes.me);
   } catch (error) {
+    console.log(error);
+    req.flash("error", "can't update profile");
     res.redirect(routes.editProfile);
   }
 };
@@ -178,6 +192,7 @@ export const postChangePassword = async (req, res) => {
   try {
     // 변경하려는 비밀번호가 인증(verify)되지 않으면
     if (newPassword !== newPassword1) {
+      req.flash("error", "password dont match");
       res.status(400);
       res.redirect(`/users${routes.changePassword}`);
       return;
@@ -185,6 +200,8 @@ export const postChangePassword = async (req, res) => {
     await req.user.changePassword(oldPassword, newPassword);
     res.redirect(routes.me);
   } catch (error) {
+    console.log(error);
+    req.flash("error", "cant change password");
     res.status(400);
     res.redirect(`/users${routes.changePassword}`);
   }

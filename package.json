@@ -22,6 +22,7 @@
     "dotenv": "^8.0.0",
     "eslint-config-prettier": "^6.1.0",
     "express": "^4.17.1",
+    "express-flash": "0.0.2",
     "express-session": "^1.16.2",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
     "get-blob-duration": "^1.1.0",
@@ -43,7 +44,7 @@
     "webpack-cli": "^3.3.7"
   },
   "scripts": {
-    "dev:server": "nodemon --exec babel-node src/init.js --delay 2 --ignore '.scss' --ignore 'static' ",
+    "dev:server": "nodemon --exec babel-node src/init.js --delay 2 --ignore '.scss' --ignore 'static'",
     "dev:assets": "cd src && WEBPACK_ENV=development webpack -w",
     "build:assets": "cd src && WEBPACK_ENV=production webpack",
     "build:server": "babel src --out-dir build --ignore 'src/assets','src/static','src/webpack.config.js'",
@@ -51,7 +52,7 @@
     "build": "npm run build:server && npm run build:assets && npm run copyAll",
     "prebuild": "rm -rf build",
     "tunnel": "lt --port 4000",
-    "start": "PRODUCTION=true node build/init.js",
+    "start": "node build/init.js",
     "prestart": "npm run build"
   },
   "devDependencies": {
